@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DatingApp.API.Data
@@ -30,9 +32,9 @@ namespace DatingApp.API.Data
 
         private bool VerifyPassword(string password, User user)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(user.PasswordSalt))
+            using (var hmac = new HMACSHA512(user.PasswordSalt))
             {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
                 if (user.PasswordHash.Length != computedHash.Length)
                     return false;
